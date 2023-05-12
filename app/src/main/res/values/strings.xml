@@ -1,3 +1,65 @@
 <resources>
     <string name="app_name">Shop-Management</string>
+
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="repeat_password">Repeat password</string>
+    <string name="generic_error">Something wrong happened. Please try again.</string>
+    <string name="email_error">Please insert a valid email.</string>
+    <string name="cancel">Cancel</string>
+    <string name="try_again">Try again</string>
+    <string name="ok">OK</string>
+
+    <!-- LoginScreen -->
+    <string name="sign_in">Sign in</string>
+    <string name="login_details">Enter your login details</string>
+    <string name="forgot_password">Forgot password? Click to get recovery email</string>
+    <string name="recovery_email_sent">Check your inbox for the recovery email.</string>
+    <string name="empty_password_error">Password cannot be empty.</string>
+
+    <!-- HomeScreen -->
+    <string name="add_shop_dialog_title">Add a Shop</string>
+    <string name="add_shop_confirm">Add</string>
+    <string name="no_shop_text">You don\'t have any shop yet. Please Add one!</string>
+    <string name="no_product_shop">This shop don\'t have any products yet. Please Add one!</string>
+    <string name="shop_name_dialog">Shop Name</string>
+    <string name="shop_description_dialog">Shop Description</string>
+    <string name="shop_currency_dialog">Currency</string>
+    <string name="shops_title">Shops</string>
+
+    <!-- ShopScreen -->
+    <string name="navigation_bar_home">Home</string>
+    <string name="navigation_bar_products">Products</string>
+    <string name="navigation_bar_recipe">Recipe</string>
+
+    <!-- ShopHomeScreen -->
+
+
+    <!-- SignUpScreen -->
+    <string name="create_account">Create account</string>
+    <string name="password_error">Your password should have at least six digits and include one digit, one lower case letter and one upper case letter.</string>
+    <string name="password_match_error">Passwords do not match.</string>
+
+    <!-- SettingsScreen -->
+    <string name="settings">Settings</string>
+    <string name="sign_out">Sign out</string>
+    <string name="delete_my_account">Delete my account</string>
+
+    <!-- Dialogs -->
+    <string name="sign_out_title">Sign out?</string>
+    <string name="sign_out_description">You will have to sign in again to see your tasks.</string>
+    <string name="delete_account_title">Delete account?</string>
+    <string name="delete_account_description">You will lose all your tasks and your account will be deleted. This action is irreversible.</string>
+
+    <!-- FCM -->
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+    <string name="request_notification_permission">Request permission</string>
+    <string name="notification_permission_title">Notification permission</string>
+    <string name="notification_permission_description">The notification permission is important for this app. Please grant the permission.</string>
+
+
+    <!-- Back4app -->
+    <string name="back4app_server_url">https://parseapi.back4app.com/</string>
+    <string name="back4app_app_id">NsgrLhruPOAAyUTw6ItkZaoPG1J8FOhOTxQaCjrr</string>
+    <string name="back4app_client_key">SkkNANBM9MhNYiRGP8rLRvcdNMURlenNt8B5t3N0</string>
 </resources>

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "145969328247",
+    "project_id": "shop-management-android",
+    "storage_bucket": "shop-management-android.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:145969328247:android:7485c90c43c419b62b1672",
+        "android_client_info": {
+          "package_name": "com.foyangtech.shop_management"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "145969328247-ads7l67dg5bnuckuml59m5jodq991167.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBS7f2VR4ZGuZ8fKz7i1PcqSUEzZ6Rz98U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "145969328247-ads7l67dg5bnuckuml59m5jodq991167.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
