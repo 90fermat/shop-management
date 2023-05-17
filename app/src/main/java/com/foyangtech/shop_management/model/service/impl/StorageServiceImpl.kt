@@ -37,6 +37,10 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
     currentShopProductCollection(auth.currentUserId, shopId).snapshots().map {
       snapshot -> snapshot.toObjects()
     }
+  override fun getShopProducts(shopId: String): Flow<List<Product>> =
+    currentShopProductCollection(auth.currentUserId, shopId).snapshots().map {
+      snapshot -> snapshot.toObjects()
+    }
 
   override suspend fun getProductFromShop(shopId: String, productId: String): Shop? =
     currentShopProductCollection(auth.currentUserId, shopId)

@@ -9,6 +9,8 @@
     <string name="cancel">Cancel</string>
     <string name="try_again">Try again</string>
     <string name="ok">OK</string>
+    <string name="update">Update</string>
+    <string name="delete">Delete</string>
 
     <!-- LoginScreen -->
     <string name="sign_in">Sign in</string>
@@ -19,11 +21,13 @@
 
     <!-- HomeScreen -->
     <string name="add_shop_dialog_title">Add a Shop</string>
-    <string name="add_shop_confirm">Add</string>
+    <string name="update_shop_dialog_title">Update the Shop</string>
+    <string name="delete_shop_dialog_title">Delete the Shop</string>
+    <string name="add_confirm">Add</string>
     <string name="no_shop_text">You don\'t have any shop yet. Please Add one!</string>
     <string name="no_product_shop">This shop don\'t have any products yet. Please Add one!</string>
-    <string name="shop_name_dialog">Shop Name</string>
-    <string name="shop_description_dialog">Shop Description</string>
+    <string name="shop_name_dialog">Name</string>
+    <string name="shop_description_dialog">Description</string>
     <string name="shop_currency_dialog">Currency</string>
     <string name="shops_title">Shops</string>
 
@@ -33,6 +37,17 @@
     <string name="navigation_bar_recipe">Recipe</string>
 
     <!-- ShopHomeScreen -->
+    <!-- ShopProductScreen -->
+    <string name="search_placeholder">Search products</string>
+    <string name="price">price</string>
+    <string name="price_placeholder">initial price(buy price)</string>
+    <string name="shop_price">price In Shop</string>
+    <string name="shop_price_placeholder">price in this shop(sell price)</string>
+    <string name="stock">stock</string>
+    <string name="unit">unit</string>
+    <string name="add_product">Add a Product</string>
+    <string name="delete_product">Delete a Product</string>
+    <string name="update_product">Update a Product</string>
 
 
     <!-- SignUpScreen -->

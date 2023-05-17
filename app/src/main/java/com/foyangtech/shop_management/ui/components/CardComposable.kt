@@ -2,19 +2,25 @@ package com.foyangtech.shop_management.ui.components
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.foyangtech.shop_management.R
 import com.foyangtech.shop_management.common.extensions.dropdownSelector
+import com.foyangtech.shop_management.model.Product
 import com.foyangtech.shop_management.model.Shop
 
 @ExperimentalMaterial3Api
@@ -86,14 +92,26 @@ fun CardSelector(
   }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CardShop(shop: Shop, action: () -> Unit) {
+fun CardShop(
+  shop: Shop,
+  onClickAction: () -> Unit,
+  onMenuClicks: List<() -> Unit>
+) {
+  var showMenu by remember { mutableStateOf(false) }
+  val onDismiss = { showMenu = !showMenu }
+
   ElevatedCard(
-    onClick = action,
     modifier = Modifier
       .padding(16.dp)
-      .fillMaxWidth(),
+      .fillMaxWidth()
+      .pointerInput(Unit) {
+        detectTapGestures (
+          onTap = { onClickAction() },
+          onLongPress = { showMenu = true }
+        )
+      },
     elevation = CardDefaults.elevatedCardElevation(8.dp, 6.dp, 9.dp, 7.dp)
   ) {
     Column(modifier = Modifier.padding(16.dp)) {
@@ -101,6 +119,14 @@ fun CardShop(shop: Shop, action: () -> Unit) {
       Spacer(modifier = Modifier.height(8.dp))
       Text(text = shop.description, style = MaterialTheme.typography.bodyLarge)
       Spacer(modifier = Modifier.height(8.dp))
+      Box(modifier = Modifier.fillMaxWidth().wrapContentSize(Alignment.TopCenter)) {
+        ContextMenuCard(
+          showMenu = showMenu,
+          menuItems = cardMenuItems,
+          onClickCallbacks = onMenuClicks) {
+          onDismiss()
+        }
+      }
       Image(painter = painterResource(id = R.drawable.shop_logo_management),
         contentDescription = "Shop Management Logo",
         modifier = Modifier
@@ -113,26 +139,65 @@ fun CardShop(shop: Shop, action: () -> Unit) {
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CardShop2(shop: Shop, action: () -> Unit) {
-  ElevatedCard(
-    onClick = action,
+fun CardProduct(
+  product: Product,
+  onClickAction: () -> Unit,
+  onMenuClicks: List<() -> Unit>,
+  currency: String
+) {
+  var showMenu by remember { mutableStateOf(false) }
+  val onDismiss = { showMenu = !showMenu }
+
+  Card(
     modifier = Modifier
       .padding(16.dp)
-      .fillMaxWidth(),
-    elevation = CardDefaults.elevatedCardElevation(8.dp, 6.dp, 9.dp, 7.dp)
+      .fillMaxWidth()
+      .pointerInput(Unit) {
+        detectTapGestures (
+          onTap = { onClickAction() },
+          onLongPress = { showMenu = true }
+        )
+      },
+    elevation = CardDefaults.cardElevation(8.dp, 6.dp, 9.dp, 7.dp)
   ) {
-    Column(modifier = Modifier.padding(16.dp)) {
+    Row(modifier = Modifier.padding(16.dp)) {
       Image(painter = painterResource(id = R.drawable.shop_logo_management),
         contentDescription = "Shop Management Logo",
         modifier = Modifier
-          .fillMaxWidth()
-          .height(200.dp),
+          .height(100.dp),
         contentScale = ContentScale.Inside
       )
-      Spacer(modifier = Modifier.height(8.dp))
-      Text(text = shop.name, style = MaterialTheme.typography.headlineLarge)
-      Spacer(modifier = Modifier.height(8.dp))
-      Text(text = shop.description, style = MaterialTheme.typography.bodyLarge)
+
+      Box(modifier = Modifier.wrapContentSize(Alignment.TopCenter)) {
+        ContextMenuCard(
+          showMenu = showMenu,
+          menuItems = cardMenuItems,
+          onClickCallbacks = onMenuClicks) {
+          onDismiss()
+        }
+      }
+      Spacer(modifier = Modifier.padding(0.dp, 0.dp, 8.dp, 0.dp))
+
+      Column(modifier = Modifier.padding(8.dp)) {
+        Text(text = product.name, style = MaterialTheme.typography.titleLarge)
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(text = "${product.stockInShop} ${product.unit}", style = MaterialTheme.typography.bodyMedium)
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(text = "${product.shopPrice} $currency", style = MaterialTheme.typography.bodyMedium)
+      }
     }
   }
 }
+
+val cardMenuItems = listOf(R.string.update, R.string.delete)
+
+
+/*
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun CardProductPreview() {
+  CardProduct(product = Product(name = "Test Product", stockInShop = 8.0, shopPrice = 3000.0),
+    action = { */
+/*TODO*//*
+ }, currency = "FCFA")
+}*/

@@ -1,29 +1,227 @@
 package com.foyangtech.shop_management.ui.screens.shop.product
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.foyangtech.shop_management.model.Product
+import com.foyangtech.shop_management.model.Shop
+import com.foyangtech.shop_management.ui.components.CardProduct
+import com.foyangtech.shop_management.ui.components.DialogCancelButton
+import com.foyangtech.shop_management.ui.components.DialogConfirmButton
+import com.foyangtech.shop_management.ui.components.SearchTextField
+import java.util.Currency
+import java.util.Locale
+import com.foyangtech.shop_management.R.string as AppText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ShopProductScreen(shopId: String) {
-    Column(
-        modifier = Modifier
-        .fillMaxWidth()
-        .fillMaxHeight()
-        .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+fun ShopProductScreen(
+    shopId: String,
+    viewModel: ShopProductViewModel = hiltViewModel()
+) {
+    val shop by viewModel.shop
+
+    LaunchedEffect(Unit) {
+       viewModel.initialize(shopId)
+    }
+
+    val uiState = remember { viewModel.uiState }
+    val searchState = remember { mutableStateOf(TextFieldValue("")) }
+    val showAddProductDialog = remember { mutableStateOf(false) }
+    val products = viewModel.getProducts(shopId).collectAsStateWithLifecycle(initialValue = emptyList())
+    Scaffold(
+        floatingActionButton = {
+            FloatingActionButton(onClick = { showAddProductDialog.value = true}) {
+                Icon(Icons.Filled.Add, contentDescription = null)
+            }
+        }
     ) {
-        Text(text = "SHOP PRODUCT", style = MaterialTheme.typography.headlineLarge)
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .padding(it),
+
+            ) {
+            SearchTextField(state = searchState, Modifier.fillMaxWidth())
+            ProductList(searchState, products, shop, viewModel)
+        }
+    }
+
+    if (showAddProductDialog.value) AddProductDialog(showDialog = showAddProductDialog, viewModel)
+
+}
+
+@Composable
+private fun ProductList(
+    searchedProductState: MutableState<TextFieldValue>,
+    stateList: State<List<Product>>,
+    shop: Shop,
+    viewModel: ShopProductViewModel
+) {
+    val filteredListState = remember { mutableStateOf(listOf<Product>()) }
+    val showUpdateDialog = remember { mutableStateOf(false) }
+    val name = remember { viewModel.name }
+    viewModel.name = name
+    val price = remember { viewModel.price }
+    viewModel.price = price
+    val shopPrice = remember { viewModel.shopPrice }
+    viewModel.shopPrice = shopPrice
+    val stock = remember { viewModel.stock }
+    viewModel.stock = stock
+    val unit = remember { viewModel.unit }
+    viewModel.unit = unit
+    val uiState = remember { viewModel.uiState }
+
+    LazyColumn(modifier = Modifier.fillMaxWidth()) {
+
+        if (searchedProductState.value.text != "") {
+            filteredListState.value = stateList.value
+                .filter { it.name.lowercase(Locale.getDefault())
+                    .contains(searchedProductState.value.text) }
+        } else  { filteredListState.value = stateList.value }
+
+        if (stateList.value.isEmpty()) item {
+
+        }
+        else items(filteredListState.value){
+            CardProduct(
+                product = it,
+                onClickAction = { /*TODO*/ },
+                onMenuClicks = listOf(
+                    {
+                        name.value = it.name
+                        price.value = it.price
+                        shopPrice.value = it.shopPrice
+                        stock.value = it.stockInShop
+                        unit.value =  it.unit
+                        uiState.value = uiState.value
+                            .copy(name=name.value, price = price.value,
+                                shopPrice = shopPrice.value, stock = stock.value, unit = unit.value)
+                        showUpdateDialog.value = true
+                    },
+                    {}
+                ),
+                currency = shop.currency,
+            )
+            ShowDialog(
+                showDialog = showUpdateDialog,
+                title = AppText.update_shop_dialog_title,
+                name = name,
+                price = price,
+                shopPrice = shopPrice,
+                stockInShop = stock,
+                unit = unit,
+                okAction = { viewModel.updateProduct(it, shop.id) },
+                action = AppText.update
+            )
+
+        }
     }
 }
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ShowDialog(showDialog: MutableState<Boolean>,
+                       title: Int,
+                       name: MutableState<String>,
+                       price: MutableState<Double>,
+                       shopPrice: MutableState<Double>,
+                       stockInShop: MutableState<Double>,
+                       unit: MutableState<String>,
+                       okAction: () -> Unit,
+                       action: Int
+) {
+
+    if (showDialog.value) {
+        AlertDialog(
+            title =  { Text(text = stringResource(id = title)) },
+            dismissButton = { DialogCancelButton(AppText.cancel) { showDialog.value = false } },
+            confirmButton = {
+                DialogConfirmButton(text = action) {
+                    showDialog.value = false
+                    okAction()
+                }
+            },
+            onDismissRequest = { showDialog.value = false },
+            text = {
+                Column {
+                    OutlinedTextField(value = name.value,
+                        onValueChange = { name.value = it },
+                        label = { Text(text = stringResource(id = AppText.shop_name_dialog))}
+                    )
+                    OutlinedTextField(value = "${price.value}",
+                        onValueChange = { price.value = it.toDouble() },
+                        label = { Text(text = stringResource(id = AppText.price))}
+                    )
+                    OutlinedTextField(value = "${shopPrice.value}",
+                        onValueChange = { shopPrice.value = it.toDouble() },
+                        label = { Text(text = stringResource(id = AppText.shop_price))}
+                    )
+                    OutlinedTextField(value = "${stockInShop.value}",
+                        onValueChange = { stockInShop.value = it.toDouble() },
+                        label = { Text(text = stringResource(id =AppText.stock))}
+                    ) 
+                    OutlinedTextField(value = unit.value,
+                        onValueChange = { unit.value = it },
+                        label = { Text(text = stringResource(id = AppText.unit))}
+                    )
+                }
+            }
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun AddProductDialog(showDialog: MutableState<Boolean>, viewModel: ShopProductViewModel) {
+    val name = remember { mutableStateOf("") }
+    val price = remember { mutableStateOf(0.0) }
+    val shopPrice = remember { mutableStateOf(0.0) }
+    val stock = remember { mutableStateOf(0.0) }
+    val unit = remember { mutableStateOf("unit") }
+    
+    ShowDialog(
+        showDialog = showDialog,
+        title = AppText.add_product,
+        name = name,
+        price = price,
+        shopPrice = shopPrice,
+        stockInShop = stock,
+        unit = unit,
+        okAction = {
+            viewModel.saveProduct(
+                Product("", name.value, price.value,
+                shopPrice.value, stock.value, unit.value)
+            )
+                   },
+        action = AppText.add_confirm
+    )
+}
+
+

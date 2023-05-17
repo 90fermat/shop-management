@@ -1,6 +1,8 @@
 package com.foyangtech.shop_management.ui.screens.home
 
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.res.stringResource
+import com.foyangtech.shop_management.R
 import com.foyangtech.shop_management.util.SETTINGS_SCREEN
 import com.foyangtech.shop_management.util.SHOP_SCREEN
 import com.foyangtech.shop_management.model.Shop
@@ -26,6 +28,14 @@ class HomeViewModel@Inject constructor(
         get() = uiState.value.showDialogShopDescription
     private val showDialogShopCurrency
         get() = uiState.value.showDialogShopCurrency
+    private val updatedShopCurrency
+        get() = uiState.value.updatedShopCurrency
+    private val updatedShopName
+        get() = uiState.value.updatedShopName
+    private val updatedShopDescription
+        get() = uiState.value.updatedShopDescription
+
+
 
 
     val shops = storageService.shops
@@ -33,13 +43,24 @@ class HomeViewModel@Inject constructor(
     fun onShopNameChange(newValue: String) {
         uiState.value = uiState.value.copy(showDialogShopName = newValue)
     }
+    fun onUpdateShopNameChange(newValue: String) {
+        uiState.value = uiState.value.copy(updatedShopName = newValue)
+    }
 
     fun onShopDescriptionChange(newValue: String) {
         uiState.value = uiState.value.copy(showDialogShopDescription = newValue)
     }
 
+    fun onUpdateShopDescriptionChange(newValue: String) {
+        uiState.value = uiState.value.copy(updatedShopDescription = newValue)
+    }
+
     fun onShopCurrencyChange(newValue: String) {
         uiState.value = uiState.value.copy(showDialogShopCurrency = newValue)
+    }
+
+    fun onUpdateShopCurrencyChange(newValue: String) {
+        uiState.value = uiState.value.copy(updatedShopCurrency = newValue)
     }
 
     fun addShop() {
@@ -57,9 +78,27 @@ class HomeViewModel@Inject constructor(
         uiState.value.showDialogShopCurrency = ""
     }
 
+    fun updateShop(shop: Shop) {
+        launchCatching {
+            storageService.updateShop(
+                shop.copy(name= uiState.value.updatedShopName,
+                description = uiState.value.updatedShopDescription,
+                currency = uiState.value.updatedShopCurrency))
+        }
+
+    }
+
+    fun deleteShop(shopId: String) {
+        launchCatching {
+            storageService.deleteShop(shopId)
+        }
+    }
+
     fun onSettingsClick(openScreen: (String) -> Unit) = openScreen(SETTINGS_SCREEN)
 
     fun onShopCardClick(shopId: String, openScreen: (String) -> Unit) =
         openScreen("$SHOP_SCREEN/$shopId")
+
+
 
 }

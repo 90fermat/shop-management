@@ -14,6 +14,7 @@ interface StorageService {
     suspend fun deleteShop(shopId: String)
 
     suspend fun getProductsFromShop(shopId: String): Flow<List<Product>>
+    fun getShopProducts(shopId: String): Flow<List<Product>>
     suspend fun getProductFromShop(shopId: String, productId: String): Shop?
     suspend fun saveProductToShop(shopId: String, product: Product): String
     suspend fun updateProductFromShop(shopId: String, product: Product)
