@@ -34,6 +34,7 @@ import com.foyangtech.shop_management.common.snackbar.SnackbarManager
 import com.foyangtech.shop_management.ui.screens.home.HomeScreen
 import com.foyangtech.shop_management.ui.screens.login.LoginScreen
 import com.foyangtech.shop_management.ui.screens.settings.SettingsScreen
+import com.foyangtech.shop_management.ui.screens.shop.product.edit.EditProductScreen
 import com.foyangtech.shop_management.ui.screens.shop.shopScreens
 import com.foyangtech.shop_management.ui.screens.sign_up.SignUpScreen
 import com.foyangtech.shop_management.ui.screens.splash.SplashScreen
@@ -43,6 +44,7 @@ import com.foyangtech.shop_management.util.LOGIN_SCREEN
 import com.foyangtech.shop_management.util.SETTINGS_SCREEN
 import com.foyangtech.shop_management.util.SIGN_UP_SCREEN
 import com.foyangtech.shop_management.util.SPLASH_SCREEN
+import com.foyangtech.shop_management.util.UPDATE_PRODUCT
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -173,5 +175,5 @@ fun NavGraphBuilder.shopManagementGraph(appState: RootAppState) {
         HomeScreen(openScreen = { route -> appState.navigate(route) })
     }
 
-    shopGraph(appState.navController)
+    shopGraph(appState)
 }

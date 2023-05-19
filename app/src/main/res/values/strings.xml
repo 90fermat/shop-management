@@ -11,6 +11,9 @@
     <string name="ok">OK</string>
     <string name="update">Update</string>
     <string name="delete">Delete</string>
+    <string name="field_not_empty_error">The Field is required</string>
+    <string name="confirm_delete_title">Confirm Delete</string>
+    <string name="confirm_delete_body">Are you sure you want to delete this ?</string>
 
     <!-- LoginScreen -->
     <string name="sign_in">Sign in</string>

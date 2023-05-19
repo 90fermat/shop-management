@@ -11,11 +11,11 @@ import com.google.firebase.firestore.ktx.snapshots
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.firestore.ktx.toObjects
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
 
 class StorageServiceImpl
 @Inject
@@ -42,7 +42,7 @@ constructor(private val firestore: FirebaseFirestore, private val auth: AccountS
       snapshot -> snapshot.toObjects()
     }
 
-  override suspend fun getProductFromShop(shopId: String, productId: String): Shop? =
+  override suspend fun getProductFromShop(shopId: String, productId: String): Product? =
     currentShopProductCollection(auth.currentUserId, shopId)
       .document(productId).get().await().toObject()
 

@@ -103,7 +103,7 @@ fun DropdownSelector(
   }
 }
 
-@Composable
+/*@Composable
 @ExperimentalMaterial3Api
 private fun dropdownColors(): TextFieldColors {
   return ExposedDropdownMenuDefaults.textFieldColors(
@@ -115,7 +115,7 @@ private fun dropdownColors(): TextFieldColors {
     focusedLabelColor = MaterialTheme.colorScheme.primary,
     unfocusedLabelColor = MaterialTheme.colorScheme.primary
   )
-}
+}*/
 
 @Composable
 fun ContextMenuCard(

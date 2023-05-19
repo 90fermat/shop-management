@@ -6,10 +6,9 @@ import com.foyangtech.shop_management.model.Shop
 import com.foyangtech.shop_management.model.service.LogService
 import com.foyangtech.shop_management.model.service.StorageService
 import com.foyangtech.shop_management.ui.screens.ShopManagementViewModel
+import com.foyangtech.shop_management.util.UPDATE_PRODUCT
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,23 +23,6 @@ class ShopProductViewModel@Inject constructor(
         private set
     private val search
         get() = uiState.value.searchText
-
-    var name = mutableStateOf(uiState.value.name)
-    var price = mutableStateOf(uiState.value.price)
-    var shopPrice = mutableStateOf(uiState.value.shopPrice)
-    var stock = mutableStateOf(uiState.value.stock)
-    var unit = mutableStateOf(uiState.value.unit)
-
-    /*private val name
-        get() = uiState.value.name
-    private val price
-        get() = uiState.value.price
-    private val shopPrice
-        get() = uiState.value.shopPrice
-    private val stock
-        get() = uiState.value.stock
-    private val unit
-        get() = uiState.value.unit*/
 
     fun initialize(shopId: String) {
         launchCatching(true) {
@@ -58,16 +40,12 @@ class ShopProductViewModel@Inject constructor(
         }
     }
 
-    fun updateProduct(product: Product, shopId: String) {
+    fun onUpdateMenuClick(productId: String, openScreen: (String) -> Unit) =
+        openScreen("$UPDATE_PRODUCT/${shop.value.id}/$productId")
+
+    fun confirmDelete(productId: String) {
         launchCatching {
-            storageService.updateProductFromShop(shopId,
-                product.copy(
-                    name = name.value, price = uiState.value.price,
-                    shopPrice = uiState.value.shopPrice, stockInShop = uiState.value.stock,
-                    unit = uiState.value.unit
-                )
-            )
+            storageService.deleteProductFromShop(shop.value.id, productId)
         }
     }
-
 }

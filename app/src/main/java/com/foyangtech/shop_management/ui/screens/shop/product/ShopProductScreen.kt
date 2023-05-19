@@ -33,14 +33,13 @@ import com.foyangtech.shop_management.ui.components.CardProduct
 import com.foyangtech.shop_management.ui.components.DialogCancelButton
 import com.foyangtech.shop_management.ui.components.DialogConfirmButton
 import com.foyangtech.shop_management.ui.components.SearchTextField
-import java.util.Currency
 import java.util.Locale
 import com.foyangtech.shop_management.R.string as AppText
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShopProductScreen(
     shopId: String,
+    openScreen: (String) -> Unit,
     viewModel: ShopProductViewModel = hiltViewModel()
 ) {
     val shop by viewModel.shop
@@ -68,7 +67,7 @@ fun ShopProductScreen(
 
             ) {
             SearchTextField(state = searchState, Modifier.fillMaxWidth())
-            ProductList(searchState, products, shop, viewModel)
+            ProductList(searchState, products, shop, openScreen, viewModel)
         }
     }
 
@@ -81,21 +80,11 @@ private fun ProductList(
     searchedProductState: MutableState<TextFieldValue>,
     stateList: State<List<Product>>,
     shop: Shop,
+    openScreen: (String) -> Unit,
     viewModel: ShopProductViewModel
 ) {
     val filteredListState = remember { mutableStateOf(listOf<Product>()) }
-    val showUpdateDialog = remember { mutableStateOf(false) }
-    val name = remember { viewModel.name }
-    viewModel.name = name
-    val price = remember { viewModel.price }
-    viewModel.price = price
-    val shopPrice = remember { viewModel.shopPrice }
-    viewModel.shopPrice = shopPrice
-    val stock = remember { viewModel.stock }
-    viewModel.stock = stock
-    val unit = remember { viewModel.unit }
-    viewModel.unit = unit
-    val uiState = remember { viewModel.uiState }
+    val showConfirmDeleteDialog = remember { mutableStateOf(false) }
 
     LazyColumn(modifier = Modifier.fillMaxWidth()) {
 
@@ -108,39 +97,28 @@ private fun ProductList(
         if (stateList.value.isEmpty()) item {
 
         }
-        else items(filteredListState.value){
+        else items(filteredListState.value) {
             CardProduct(
                 product = it,
                 onClickAction = { /*TODO*/ },
                 onMenuClicks = listOf(
+                    { viewModel.onUpdateMenuClick(it.id, openScreen) },
                     {
-                        name.value = it.name
-                        price.value = it.price
-                        shopPrice.value = it.shopPrice
-                        stock.value = it.stockInShop
-                        unit.value =  it.unit
-                        uiState.value = uiState.value
-                            .copy(name=name.value, price = price.value,
-                                shopPrice = shopPrice.value, stock = stock.value, unit = unit.value)
-                        showUpdateDialog.value = true
-                    },
-                    {}
+                        showConfirmDeleteDialog.value = true
+
+                    }
                 ),
                 currency = shop.currency,
-            )
-            ShowDialog(
-                showDialog = showUpdateDialog,
-                title = AppText.update_shop_dialog_title,
-                name = name,
-                price = price,
-                shopPrice = shopPrice,
-                stockInShop = stock,
-                unit = unit,
-                okAction = { viewModel.updateProduct(it, shop.id) },
-                action = AppText.update
-            )
-
+            ) {
+                /*TODO(delete not work. delete always the last item)*/
+                if (showConfirmDeleteDialog.value) {
+                    ConfirmDeleteDialog(showDialog = showConfirmDeleteDialog) {
+                        viewModel.confirmDelete(it.id)
+                    }
+                }
+            }
         }
+
     }
 }
 
@@ -192,6 +170,29 @@ private fun ShowDialog(showDialog: MutableState<Boolean>,
                         label = { Text(text = stringResource(id = AppText.unit))}
                     )
                 }
+            }
+        )
+    }
+}
+
+@Composable
+private fun ConfirmDeleteDialog(
+    showDialog: MutableState<Boolean>,
+    action: () -> Unit
+) {
+    if (showDialog.value) {
+        AlertDialog(
+            title =  { Text(text = stringResource(id = AppText.confirm_delete_title)) },
+            dismissButton = { DialogCancelButton(AppText.cancel) { showDialog.value = false } },
+            confirmButton = {
+                DialogConfirmButton(text = AppText.delete) {
+                    showDialog.value = false
+                    action()
+                }
+            },
+            onDismissRequest = { showDialog.value = false },
+            text = {
+                Text(text = stringResource(id = AppText.confirm_delete_body))
             }
         )
     }
