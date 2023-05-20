@@ -37,6 +37,7 @@ import com.foyangtech.shop_management.model.Shop
 import com.foyangtech.shop_management.ui.components.ActionToolbar
 import com.foyangtech.shop_management.ui.components.CardShop
 import com.foyangtech.shop_management.ui.components.ConfirmDeleteDialog
+import com.foyangtech.shop_management.ui.components.ContextMenuItem
 import com.foyangtech.shop_management.ui.components.DialogCancelButton
 import com.foyangtech.shop_management.ui.components.DialogConfirmButton
 import com.foyangtech.shop_management.ui.components.DropdownSelector
@@ -157,16 +158,21 @@ private fun ShopList(
             CardShop(
                 shop = it,
                 onClickAction = { viewModel.onShopCardClick(it.id, openScreen) },
-                onMenuClicks = listOf(
-                    {
-                        viewModel.onUpdateMenuClick(it)
-                        showUpdateDialog.value = true
-                    },
-                    {
-                        viewModel.onDeleteMenuClick(it)
-                        showDeleteDialog.value = true
-                    }
+                menuItems = listOf(
+                    ContextMenuItem.UpdateMenuItem(
+                        action = {
+                            viewModel.onUpdateMenuClick(it)
+                            showUpdateDialog.value = true
+                        }
+                    ),
+                    ContextMenuItem.DeleteMenuItem(
+                        action = {
+                            viewModel.onDeleteMenuClick(it)
+                            showDeleteDialog.value = true
+                        }
+                    )
                 )
+
             )
         }
     }

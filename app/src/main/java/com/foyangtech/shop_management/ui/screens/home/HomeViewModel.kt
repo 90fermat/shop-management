@@ -64,8 +64,8 @@ class HomeViewModel@Inject constructor(
         launchCatching {
             storageService.saveShop(
                 Shop("",
-                    showDialogShopName,
-                    showDialogShopDescription,
+                    showDialogShopName.trim(),
+                    showDialogShopDescription.trim(),
                     showDialogShopCurrency
                 )
             )
@@ -79,8 +79,8 @@ class HomeViewModel@Inject constructor(
     fun updateShop(shop: Shop) {
         launchCatching {
             storageService.updateShop(
-                shop.copy(name= updatedShopName,
-                description = updatedShopDescription,
+                shop.copy(name= updatedShopName.trim(),
+                description = updatedShopDescription.trim(),
                 currency = updatedShopCurrency))
         }
     }
@@ -95,7 +95,7 @@ class HomeViewModel@Inject constructor(
         currentSelectedShop.value = shop
         onUpdateShopNameChange(shop.name)
         onUpdateShopDescriptionChange(shop.description)
-        onShopCurrencyChange(shop.currency)
+        onUpdateShopCurrencyChange(shop.currency)
     }
 
     fun onDeleteMenuClick(shop: Shop) {

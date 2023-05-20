@@ -31,6 +31,7 @@ import com.foyangtech.shop_management.model.Product
 import com.foyangtech.shop_management.model.Shop
 import com.foyangtech.shop_management.ui.components.CardProduct
 import com.foyangtech.shop_management.ui.components.ConfirmDeleteDialog
+import com.foyangtech.shop_management.ui.components.ContextMenuItem
 import com.foyangtech.shop_management.ui.components.DialogCancelButton
 import com.foyangtech.shop_management.ui.components.DialogConfirmButton
 import com.foyangtech.shop_management.ui.components.SearchTextField
@@ -112,12 +113,18 @@ private fun ProductList(
             CardProduct(
                 product = it,
                 onClickAction = { /*TODO*/ },
-                onMenuClicks = listOf(
-                    { viewModel.onUpdateMenuClick(it.id, openScreen) },
-                    {
-                        viewModel.onDeleteMenuClick(it)
-                        showDialog.value = true
-                    }
+                menuItems = listOf(
+                    ContextMenuItem.UpdateMenuItem(
+                        action = {
+                            viewModel.onUpdateMenuClick(it.id, openScreen)
+                        }
+                    ),
+                    ContextMenuItem.DeleteMenuItem(
+                        action = {
+                            viewModel.onDeleteMenuClick(it)
+                            showDialog.value = true
+                        }
+                    )
                 ),
                 currency = shop.currency,
             )

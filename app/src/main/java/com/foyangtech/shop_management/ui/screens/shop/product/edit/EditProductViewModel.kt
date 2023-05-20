@@ -49,11 +49,11 @@ class EditProductViewModel@Inject constructor(
    fun updateState(name: String, price: String, shopPrice: String, stock: String, unit: String) {
       uiState.value = uiState.value.copy(name, price, shopPrice, stock, unit)
       product.value = product.value.copy(
-         name = name,
-         price = price.toDouble(),
-         shopPrice = shopPrice.toDouble(),
-         stockInShop = stock.toDouble(),
-         unit = unit
+         name = name.trim(),
+         price = price.trim().toDouble(),
+         shopPrice = shopPrice.trim().toDouble(),
+         stockInShop = stock.trim().toDouble(),
+         unit = unit.trim()
       )
    }
    private fun stateChange(

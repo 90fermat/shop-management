@@ -95,7 +95,7 @@ fun CardSelector(
 fun CardShop(
   shop: Shop,
   onClickAction: () -> Unit,
-  onMenuClicks: List<() -> Unit>
+  menuItems: List<ContextMenuItem>
 ) {
   var showMenu by remember { mutableStateOf(false) }
   val onDismiss = { showMenu = !showMenu }
@@ -120,8 +120,8 @@ fun CardShop(
       Box(modifier = Modifier.fillMaxWidth().wrapContentSize(Alignment.TopCenter)) {
         ContextMenuCard(
           showMenu = showMenu,
-          menuItems = cardMenuItems,
-          onClickCallbacks = onMenuClicks) {
+          menuItems = menuItems,
+        ) {
           onDismiss()
         }
       }
@@ -140,7 +140,7 @@ fun CardShop(
 fun CardProduct(
   product: Product,
   onClickAction: () -> Unit,
-  onMenuClicks: List<() -> Unit>,
+  menuItems: List<ContextMenuItem>,
   currency: String,
 ) {
   var showMenu by remember { mutableStateOf(false) }
@@ -169,8 +169,8 @@ fun CardProduct(
       Box(modifier = Modifier.wrapContentSize(Alignment.TopCenter)) {
         ContextMenuCard(
           showMenu = showMenu,
-          menuItems = cardMenuItems,
-          onClickCallbacks = onMenuClicks) {
+          menuItems = menuItems,
+          ) {
           onDismiss()
         }
       }
@@ -186,9 +186,6 @@ fun CardProduct(
     }
   }
 }
-
-val cardMenuItems = listOf(R.string.update, R.string.delete)
-
 
 /*
 @Preview(showBackground = true, showSystemUi = true)

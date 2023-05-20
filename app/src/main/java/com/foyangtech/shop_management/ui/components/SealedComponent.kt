@@ -1,4 +1,4 @@
-package com.foyangtech.shop_management.ui.screens.shop
+package com.foyangtech.shop_management.ui.components
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
@@ -21,4 +21,10 @@ sealed class ShopScreen(val route: String,
 
 val shopScreens = listOf<ShopScreen>(ShopScreen.Home, ShopScreen.Products, ShopScreen.Recipe)
 
-
+sealed class ContextMenuItem(
+   @StringRes val text: Int,
+   val action: () -> Unit
+) {
+   class UpdateMenuItem(action: () -> Unit) : ContextMenuItem(R.string.update, action)
+   class DeleteMenuItem(action: () -> Unit) : ContextMenuItem(R.string.delete, action)
+}
