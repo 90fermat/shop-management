@@ -191,7 +191,7 @@ private fun Form(
       Button(
          onClick = {
              withValidable(name, price, shopPrice, stock, unit) {
-                viewModel.onStateChange(uiState.name, uiState.price,
+                viewModel.updateState(uiState.name, uiState.price,
                    uiState.shopPrice, uiState.stock, uiState.unit)
                 viewModel.updateProduct(shopId, popScreen)
              }

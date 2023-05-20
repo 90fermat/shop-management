@@ -6,7 +6,6 @@ import com.foyangtech.shop_management.model.service.LogService
 import com.foyangtech.shop_management.model.service.StorageService
 import com.foyangtech.shop_management.ui.screens.ShopManagementViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,15 +20,10 @@ class EditProductViewModel@Inject constructor(
 
    fun initialize(shopId: String, productId: String) {
       launchCatching(true) {
-         val productDefered = async {
-            storageService.getProductFromShop(shopId, productId) ?: Product()
-         }
-         product.value = productDefered.await()
-
-         onStateChange(product.value .name, "${product.value.price}",
+         product.value = storageService.getProductFromShop(shopId, productId) ?: Product()
+         stateChange(product.value .name, "${product.value.price}",
             "${product.value.shopPrice}", "${product.value.stockInShop}",
             product.value.unit)
-
       }
    }
    fun onNameChange(newValue: String) {
@@ -52,7 +46,7 @@ class EditProductViewModel@Inject constructor(
       uiState.value = uiState.value.copy(unit = newValue)
    }
 
-   fun onStateChange(name: String, price: String, shopPrice: String, stock: String, unit: String) {
+   fun updateState(name: String, price: String, shopPrice: String, stock: String, unit: String) {
       uiState.value = uiState.value.copy(name, price, shopPrice, stock, unit)
       product.value = product.value.copy(
          name = name,
@@ -61,6 +55,11 @@ class EditProductViewModel@Inject constructor(
          stockInShop = stock.toDouble(),
          unit = unit
       )
+   }
+   private fun stateChange(
+      name: String, price: String, shopPrice: String,
+      stock: String, unit: String) {
+      uiState.value = uiState.value.copy(name, price, shopPrice, stock, unit)
    }
 
    fun updateProduct(shopId: String, popScreen: () -> Unit) {
