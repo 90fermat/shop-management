@@ -48,9 +48,10 @@ fun ShopProductScreen(
        viewModel.initialize(shopId)
     }
 
-    val uiState = remember { viewModel.uiState }
     val searchState = remember { mutableStateOf(TextFieldValue("")) }
     val showAddProductDialog = remember { mutableStateOf(false) }
+    val showConfirmDeleteDialog = remember { mutableStateOf(false) }
+
     val products = viewModel.getProducts(shopId).collectAsStateWithLifecycle(initialValue = emptyList())
     Scaffold(
         floatingActionButton = {
@@ -67,12 +68,21 @@ fun ShopProductScreen(
 
             ) {
             SearchTextField(state = searchState, Modifier.fillMaxWidth())
-            ProductList(searchState, products, shop, openScreen, viewModel)
+            ProductList(searchState, products, shop, openScreen, showConfirmDeleteDialog, viewModel)
         }
     }
 
     if (showAddProductDialog.value) AddProductDialog(showDialog = showAddProductDialog, viewModel)
 
+    if (showConfirmDeleteDialog.value) {
+        val toDeleteProduct by viewModel.currentToDeleteProduct
+        ConfirmDeleteDialog(
+            showDialog = showConfirmDeleteDialog,
+            text = toDeleteProduct.name
+        ) {
+            viewModel.confirmDelete(toDeleteProduct.id)
+        }
+    }
 }
 
 @Composable
@@ -81,10 +91,10 @@ private fun ProductList(
     stateList: State<List<Product>>,
     shop: Shop,
     openScreen: (String) -> Unit,
+    showDialog: MutableState<Boolean>,
     viewModel: ShopProductViewModel
 ) {
     val filteredListState = remember { mutableStateOf(listOf<Product>()) }
-    val showConfirmDeleteDialog = remember { mutableStateOf(false) }
 
     LazyColumn(modifier = Modifier.fillMaxWidth()) {
 
@@ -104,19 +114,12 @@ private fun ProductList(
                 onMenuClicks = listOf(
                     { viewModel.onUpdateMenuClick(it.id, openScreen) },
                     {
-                        showConfirmDeleteDialog.value = true
-
+                        viewModel.onDeleteMenuClick(it)
+                        showDialog.value = true
                     }
                 ),
                 currency = shop.currency,
-            ) {
-                /*TODO(delete not work. delete always the last item)*/
-                if (showConfirmDeleteDialog.value) {
-                    ConfirmDeleteDialog(showDialog = showConfirmDeleteDialog) {
-                        viewModel.confirmDelete(it.id)
-                    }
-                }
-            }
+            )
         }
 
     }
@@ -178,11 +181,12 @@ private fun ShowDialog(showDialog: MutableState<Boolean>,
 @Composable
 private fun ConfirmDeleteDialog(
     showDialog: MutableState<Boolean>,
+    text: String,
     action: () -> Unit
 ) {
     if (showDialog.value) {
         AlertDialog(
-            title =  { Text(text = stringResource(id = AppText.confirm_delete_title)) },
+            title =  { Text(text = stringResource(id = AppText.confirm_delete_title, text)) },
             dismissButton = { DialogCancelButton(AppText.cancel) { showDialog.value = false } },
             confirmButton = {
                 DialogConfirmButton(text = AppText.delete) {
@@ -192,7 +196,7 @@ private fun ConfirmDeleteDialog(
             },
             onDismissRequest = { showDialog.value = false },
             text = {
-                Text(text = stringResource(id = AppText.confirm_delete_body))
+                Text(text = stringResource(id = AppText.confirm_delete_body, text))
             }
         )
     }

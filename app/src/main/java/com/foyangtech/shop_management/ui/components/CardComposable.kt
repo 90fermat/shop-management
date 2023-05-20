@@ -142,7 +142,6 @@ fun CardProduct(
   onClickAction: () -> Unit,
   onMenuClicks: List<() -> Unit>,
   currency: String,
-  dialog: @Composable () -> Unit
 ) {
   var showMenu by remember { mutableStateOf(false) }
   val onDismiss = { showMenu = !showMenu }
@@ -185,9 +184,6 @@ fun CardProduct(
         Text(text = "${product.shopPrice} $currency", style = MaterialTheme.typography.bodyMedium)
       }
     }
-
-    /*TODO(delete not work. delete always the last item)*/
-    dialog()
   }
 }
 

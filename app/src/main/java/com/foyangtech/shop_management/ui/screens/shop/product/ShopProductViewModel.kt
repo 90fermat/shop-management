@@ -19,10 +19,8 @@ class ShopProductViewModel@Inject constructor(
 ) : ShopManagementViewModel(logService) {
 
     val shop = mutableStateOf(Shop())
-    var uiState = mutableStateOf(ShopProductUiState())
-        private set
-    private val search
-        get() = uiState.value.searchText
+
+    val currentToDeleteProduct = mutableStateOf(Product())
 
     fun initialize(shopId: String) {
         launchCatching(true) {
@@ -47,5 +45,9 @@ class ShopProductViewModel@Inject constructor(
         launchCatching {
             storageService.deleteProductFromShop(shop.value.id, productId)
         }
+    }
+
+    fun onDeleteMenuClick(product: Product) {
+        currentToDeleteProduct.value = product
     }
 }
