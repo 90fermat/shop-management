@@ -30,6 +30,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.foyangtech.shop_management.model.Product
 import com.foyangtech.shop_management.model.Shop
 import com.foyangtech.shop_management.ui.components.CardProduct
+import com.foyangtech.shop_management.ui.components.ConfirmDeleteDialog
 import com.foyangtech.shop_management.ui.components.DialogCancelButton
 import com.foyangtech.shop_management.ui.components.DialogConfirmButton
 import com.foyangtech.shop_management.ui.components.SearchTextField
@@ -178,29 +179,7 @@ private fun ShowDialog(showDialog: MutableState<Boolean>,
     }
 }
 
-@Composable
-private fun ConfirmDeleteDialog(
-    showDialog: MutableState<Boolean>,
-    text: String,
-    action: () -> Unit
-) {
-    if (showDialog.value) {
-        AlertDialog(
-            title =  { Text(text = stringResource(id = AppText.confirm_delete_title, text)) },
-            dismissButton = { DialogCancelButton(AppText.cancel) { showDialog.value = false } },
-            confirmButton = {
-                DialogConfirmButton(text = AppText.delete) {
-                    showDialog.value = false
-                    action()
-                }
-            },
-            onDismissRequest = { showDialog.value = false },
-            text = {
-                Text(text = stringResource(id = AppText.confirm_delete_body, text))
-            }
-        )
-    }
-}
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
