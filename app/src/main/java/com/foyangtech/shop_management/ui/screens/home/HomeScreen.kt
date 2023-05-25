@@ -205,13 +205,13 @@ private fun ShopDialog(showDialog: MutableState<Boolean>,
             Column {
                 OutlinedTextField(value = name,
                     onValueChange = onNameChange ,
-                    label = { Text(text = stringResource(id = AppText.shop_name_dialog))}
+                    label = { Text(text = stringResource(id = AppText.shop_name))}
                 )
                 OutlinedTextField(value = description,
                     onValueChange = onDescriptionChange,
-                    label = { Text(text = stringResource(id = AppText.shop_description_dialog))}
+                    label = { Text(text = stringResource(id = AppText.shop_description))}
                 )
-                DropdownSelector(label = R.string.shop_currency_dialog,
+                DropdownSelector(label = R.string.shop_currency,
                     options = Currencies.values().map { it.name },
                     selection = currency, modifier = Modifier,
                     onNewValue = onCurrencyChange)

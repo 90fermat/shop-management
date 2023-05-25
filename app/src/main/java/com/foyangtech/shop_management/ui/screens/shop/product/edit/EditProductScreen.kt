@@ -87,7 +87,7 @@ private fun Form(
             name.value = it
             viewModel.onNameChange(it)
           },
-         label = { Text(text = stringResource(id = R.string.shop_name_dialog)) },
+         label = { Text(text = stringResource(id = R.string.shop_name)) },
          isError = name.hasError(),
          shape = RoundedCornerShape(100)
       )

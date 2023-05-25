@@ -29,9 +29,9 @@
     <string name="add_confirm">Add</string>
     <string name="no_shop_text">You don\'t have any shop yet. Please Add one!</string>
     <string name="no_product_shop">This shop don\'t have any products yet. Please Add one!</string>
-    <string name="shop_name_dialog">Name</string>
-    <string name="shop_description_dialog">Description</string>
-    <string name="shop_currency_dialog">Currency</string>
+    <string name="shop_name">Name</string>
+    <string name="shop_description">Description</string>
+    <string name="shop_currency">Currency</string>
     <string name="shops_title">Shops</string>
 
     <!-- ShopScreen -->
@@ -40,6 +40,9 @@
     <string name="navigation_bar_recipe">Recipe</string>
 
     <!-- ShopHomeScreen -->
+    <string name="sold_out_info"><ul><li><b>\'%1$s\'(%2$2f)</b> is almost sold out, Please renew the stock</li></ul></string>
+    <string name="still_enough_info"><ul><li><b>\'%1$s\'(%2$2f)</b> is still enough</li></ul></string>
+
     <!-- ShopProductScreen -->
     <string name="search_placeholder">Search products</string>
     <string name="price">price</string>

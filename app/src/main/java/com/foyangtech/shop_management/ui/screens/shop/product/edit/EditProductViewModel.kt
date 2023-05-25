@@ -26,6 +26,7 @@ class EditProductViewModel@Inject constructor(
             product.value.unit)
       }
    }
+
    fun onNameChange(newValue: String) {
       uiState.value = uiState.value.copy(name = newValue)
    }

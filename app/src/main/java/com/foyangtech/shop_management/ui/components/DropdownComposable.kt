@@ -159,7 +159,7 @@ fun ContextMenuCardPreview() {
 @Preview
 @Composable
 fun DropDownSeletorPreview() {
-  DropdownSelector(label = R.string.shop_currency_dialog,
+  DropdownSelector(label = R.string.shop_currency,
     options = listOf("EUR", "CFA", "DOLLAR"),
     selection = "", modifier = Modifier.dropdownSelector(),
     onNewValue = {  })

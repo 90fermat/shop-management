@@ -162,7 +162,7 @@ private fun ShowDialog(showDialog: MutableState<Boolean>,
                 Column {
                     OutlinedTextField(value = name.value,
                         onValueChange = { name.value = it },
-                        label = { Text(text = stringResource(id = AppText.shop_name_dialog))}
+                        label = { Text(text = stringResource(id = AppText.shop_name))}
                     )
                     OutlinedTextField(value = "${price.value}",
                         onValueChange = { price.value = it.toDouble() },
