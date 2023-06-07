@@ -226,7 +226,7 @@ html_static_path = []
 # html_search_scorer = 'scorer.js'
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'testdoc'
+htmlhelp_basename = 'shopmanagementdoc'
 
 # -- Options for LaTeX output ---------------------------------------------
 
@@ -252,8 +252,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (root_doc, 'test.tex', 'test Documentation',
-     'test', 'manual'),
+    (root_doc, 'shop_management.tex', 'Shop Management Documentation',
+     'Shop Management', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -283,7 +283,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (root_doc, 'test', 'test Documentation',
+    (root_doc, 'Shop Management', 'Shop Management Documentation',
      [author], 1)
 ]
 
@@ -298,8 +298,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (root_doc, 'test', 'test Documentation',
-     author, 'test', 'One line description of project.',
+    (root_doc, 'Shop Management', 'Shop Management Documentation',
+     author, 'Shop Management', 'One line description of project.',
      'Miscellaneous'),
 ]
 
