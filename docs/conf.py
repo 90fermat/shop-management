@@ -235,9 +235,9 @@ latex_elements = {
     #
     # 'papersize': 'letterpaper',
 
-     The font size ('12pt', '14pt' or '16pt').
+    # The font size ('12pt', '14pt' or '16pt').
     #
-    # 'pointsize': '10pt',
+     'pointsize': '15pt',
 
     # Additional stuff for the LaTeX preamble.
     #
