@@ -46,16 +46,16 @@ source_suffix = '.rst'
 root_doc = 'index'
 
 # General information about the project.
-project = 'test'
-copyright = '2016, test'
-author = 'test'
+project = 'Shop Management'
+copyright = '2023, Shop Management, FoyangTech'
+author = 'Cyrille Martial Foyang'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
 # built documents.
 #
 # The short X.Y version.
-version = 'test'
+version = '0.2'
 # The full version, including alpha/beta/rc tags.
 release = 'test'
 
@@ -64,7 +64,7 @@ release = 'test'
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = None
+language = 'en'
 
 # There are two options for replacing |today|: either, you set today to some
 # non-false value, then it is used:
