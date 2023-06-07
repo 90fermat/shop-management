@@ -135,7 +135,6 @@ fun CardShop(
     }
   }
 }
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CardProduct(
   product: Product,
