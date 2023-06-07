@@ -9,6 +9,11 @@
     <string name="cancel">Cancel</string>
     <string name="try_again">Try again</string>
     <string name="ok">OK</string>
+    <string name="update">Update</string>
+    <string name="delete">Delete</string>
+    <string name="field_not_empty_error">The Field is required</string>
+    <string name="confirm_delete_title">Delete \'%1$s\'</string>
+    <string name="confirm_delete_body">Are you sure you want to delete \'%1$s\' ?</string>
 
     <!-- LoginScreen -->
     <string name="sign_in">Sign in</string>
@@ -19,12 +24,14 @@
 
     <!-- HomeScreen -->
     <string name="add_shop_dialog_title">Add a Shop</string>
-    <string name="add_shop_confirm">Add</string>
+    <string name="update_shop_dialog_title">Update the Shop</string>
+    <string name="delete_shop_dialog_title">Delete the Shop</string>
+    <string name="add_confirm">Add</string>
     <string name="no_shop_text">You don\'t have any shop yet. Please Add one!</string>
     <string name="no_product_shop">This shop don\'t have any products yet. Please Add one!</string>
-    <string name="shop_name_dialog">Shop Name</string>
-    <string name="shop_description_dialog">Shop Description</string>
-    <string name="shop_currency_dialog">Currency</string>
+    <string name="shop_name">Name</string>
+    <string name="shop_description">Description</string>
+    <string name="shop_currency">Currency</string>
     <string name="shops_title">Shops</string>
 
     <!-- ShopScreen -->
@@ -33,6 +40,20 @@
     <string name="navigation_bar_recipe">Recipe</string>
 
     <!-- ShopHomeScreen -->
+    <string name="sold_out_info"><ul><li><b>\'%1$s\'(%2$2f)</b> is almost sold out, Please renew the stock</li></ul></string>
+    <string name="still_enough_info"><ul><li><b>\'%1$s\'(%2$2f)</b> is still enough</li></ul></string>
+
+    <!-- ShopProductScreen -->
+    <string name="search_placeholder">Search products</string>
+    <string name="price">price</string>
+    <string name="price_placeholder">initial price(buy price)</string>
+    <string name="shop_price">price In Shop</string>
+    <string name="shop_price_placeholder">price in this shop(sell price)</string>
+    <string name="stock">stock</string>
+    <string name="unit">unit</string>
+    <string name="add_product">Add a Product</string>
+    <string name="delete_product">Delete a Product</string>
+    <string name="update_product">Update a Product</string>
 
 
     <!-- SignUpScreen -->

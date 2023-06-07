@@ -19,33 +19,31 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.foyangtech.shop_management.R
-import com.foyangtech.shop_management.common.extensions.dropdownSelector
 import com.foyangtech.shop_management.common.extensions.smallSpacer
 import com.foyangtech.shop_management.common.extensions.toolbarActions
-import com.foyangtech.shop_management.R.string as AppText
 import com.foyangtech.shop_management.model.Shop
 import com.foyangtech.shop_management.ui.components.ActionToolbar
 import com.foyangtech.shop_management.ui.components.CardShop
-import com.foyangtech.shop_management.ui.components.CardShop2
+import com.foyangtech.shop_management.ui.components.ConfirmDeleteDialog
+import com.foyangtech.shop_management.ui.components.ContextMenuItem
 import com.foyangtech.shop_management.ui.components.DialogCancelButton
 import com.foyangtech.shop_management.ui.components.DialogConfirmButton
 import com.foyangtech.shop_management.ui.components.DropdownSelector
 import com.foyangtech.shop_management.util.Currencies
+import com.foyangtech.shop_management.R.string as AppText
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     openScreen: (String) -> Unit,
@@ -53,12 +51,15 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by remember  { viewModel.uiState }
-    var showAddShopDialog by remember { mutableStateOf(false) }
-    val shops = viewModel.shops.collectAsStateWithLifecycle(initialValue = emptyList())
+    val showAddShopDialog = remember { mutableStateOf(false) }
+    val showUpdateDialog = remember { mutableStateOf(false) }
+    val showConfirmDeleteDialog = remember { mutableStateOf(false) }
+
+    val shops = viewModel.shops.collectAsStateWithLifecycle(emptyList())
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { showAddShopDialog = true },
+                onClick = { showAddShopDialog.value = true },
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary,
                 modifier = modifier.padding(16.dp)
@@ -76,47 +77,66 @@ fun HomeScreen(
 
         Spacer(modifier = Modifier.smallSpacer())
 
-        ShopList(list = shops, Modifier.padding(it), viewModel, openScreen)
+        ShopList(list = shops, Modifier.padding(it), viewModel,
+            showUpdateDialog, showConfirmDeleteDialog, openScreen)
 
-        /*Column(modifier = Modifier.fillMaxWidth().fillMaxHeight()) {
-
-        }*/
     }
 
-    if (showAddShopDialog) {
-        AlertDialog(
-            title =  { Text(text = stringResource(id = AppText.add_shop_dialog_title)) },
-            dismissButton = { DialogCancelButton(AppText.cancel) { showAddShopDialog = false } },
-            confirmButton = {
-                DialogConfirmButton(text = AppText.add_shop_confirm) {
-                    showAddShopDialog = false
-                    viewModel.addShop()
-                }
-            },
-            onDismissRequest = { showAddShopDialog = false },
-            text = {
-                Column {
-                    OutlinedTextField(value = uiState.showDialogShopName,
-                        onValueChange = { viewModel.onShopNameChange(it)},
-                        label = { Text(text = stringResource(id = AppText.shop_name_dialog))}
-                    )
-                    OutlinedTextField(value = uiState.showDialogShopDescription,
-                        onValueChange = { viewModel.onShopDescriptionChange(it)},
-                        label = { Text(text = stringResource(id = AppText.shop_description_dialog))}
-                    )
-                    DropdownSelector(label = R.string.shop_currency_dialog,
-                        options = Currencies.values().map { it.name },
-                        selection = "", modifier = Modifier.dropdownSelector(),
-                        onNewValue = { viewModel.onShopCurrencyChange(it) })
-                }
-            }
+    if (showAddShopDialog.value) {
+        ShopDialog(
+            showDialog = showAddShopDialog,
+            title = AppText.add_shop_dialog_title,
+            name = uiState.showDialogShopName ,
+            description = uiState.showDialogShopDescription,
+            currency = uiState.showDialogShopCurrency,
+            onNameChange = { name -> viewModel.onShopNameChange(name) },
+            onDescriptionChange = { value -> viewModel.onShopDescriptionChange(value) },
+            onCurrencyChange = { value -> viewModel.onShopCurrencyChange(value) },
+            okAction = { viewModel.addShop()},
+            action = AppText.add_confirm
         )
+    }
+
+    if (showUpdateDialog.value) {
+
+        val toUpdateShop by viewModel.currentSelectedShop
+
+        ShopDialog(
+            showDialog = showUpdateDialog,
+            title = AppText.update_shop_dialog_title,
+            name = uiState.updatedShopName ,
+            description = uiState.updatedShopDescription,
+            currency = uiState.updatedShopCurrency,
+            onNameChange = { name -> viewModel.onUpdateShopNameChange(name) },
+            onDescriptionChange = { value -> viewModel.onUpdateShopDescriptionChange(value) },
+            onCurrencyChange = { value -> viewModel.onUpdateShopCurrencyChange(value) },
+            okAction = { viewModel.updateShop(toUpdateShop) },
+            action = AppText.update
+        )
+    }
+
+    if (showConfirmDeleteDialog.value) {
+
+        val toDeleteShop by viewModel.currentSelectedShop
+
+        ConfirmDeleteDialog(
+            showDialog = showConfirmDeleteDialog,
+            text = toDeleteShop.name
+        ) {
+            viewModel.deleteShop(toDeleteShop.id)
+        }
     }
 }
 
 @Composable
-private fun ShopList(list: State<List<Shop>>, modifier: Modifier,
-                     viewModel: HomeViewModel?, openScreen: (String) -> Unit) {
+private fun ShopList(
+    list: State<List<Shop>>,
+    modifier: Modifier,
+    viewModel: HomeViewModel,
+    showUpdateDialog: MutableState<Boolean>,
+    showDeleteDialog: MutableState<Boolean>,
+    openScreen: (String) -> Unit
+) {
 
     if (list.value.isEmpty())    {
         Column(
@@ -135,15 +155,72 @@ private fun ShopList(list: State<List<Shop>>, modifier: Modifier,
     }
     else LazyColumn(modifier = modifier) {
         items(list.value, { it.id }) {
-            CardShop(it) {
-               viewModel?.onShopCardClick(it.id, openScreen)
-            }
+            CardShop(
+                shop = it,
+                onClickAction = { viewModel.onShopCardClick(it.id, openScreen) },
+                menuItems = listOf(
+                    ContextMenuItem.UpdateMenuItem(
+                        action = {
+                            viewModel.onUpdateMenuClick(it)
+                            showUpdateDialog.value = true
+                        }
+                    ),
+                    ContextMenuItem.DeleteMenuItem(
+                        action = {
+                            viewModel.onDeleteMenuClick(it)
+                            showDeleteDialog.value = true
+                        }
+                    )
+                )
+
+            )
         }
     }
+}
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ShopDialog(showDialog: MutableState<Boolean>,
+                       title: Int,
+                       name: String,
+                       description: String,
+                       currency: String,
+                       onNameChange: (String) -> Unit,
+                       onDescriptionChange: (String) -> Unit,
+                       onCurrencyChange: (String) -> Unit,
+                       okAction: () -> Unit,
+                       action: Int
+) {
 
+    AlertDialog(
+        title =  { Text(text = stringResource(id = title)) },
+        dismissButton = { DialogCancelButton(AppText.cancel) { showDialog.value = false } },
+        confirmButton = {
+            DialogConfirmButton(text = action) {
+                showDialog.value = false
+                okAction()
+            }
+        },
+        onDismissRequest = { showDialog.value = false },
+        text = {
+            Column {
+                OutlinedTextField(value = name,
+                    onValueChange = onNameChange ,
+                    label = { Text(text = stringResource(id = AppText.shop_name))}
+                )
+                OutlinedTextField(value = description,
+                    onValueChange = onDescriptionChange,
+                    label = { Text(text = stringResource(id = AppText.shop_description))}
+                )
+                DropdownSelector(label = R.string.shop_currency,
+                    options = Currencies.values().map { it.name },
+                    selection = currency, modifier = Modifier,
+                    onNewValue = onCurrencyChange)
+            }
+        }
+    )
 }
 
-@Composable
+/*@Composable
 @Preview
 fun HomePreview() {
     ShopList( remember {
@@ -153,12 +230,13 @@ fun HomePreview() {
     },
         Modifier.padding(2.dp), null
     ) { actionPreview() }
-}
+}*/
 fun actionPreview() {
 }
 
+/*
 @Composable
 @Preview
 fun CardShopPreview() {
-    CardShop2(Shop("Test", "My Test Shop, show like a Angel")) { actionPreview() }
-}
+    CardShop(Shop("Test", "My Test Shop, show like a Angel")) { actionPreview() }
+}*/

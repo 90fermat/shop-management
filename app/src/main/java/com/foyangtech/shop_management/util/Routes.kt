@@ -12,5 +12,7 @@ const val SHOP_PRODUCT = "ShopProduct"
 const val SHOP_PRODUCT_P = "ShopProduct/{shopId}"
 const val SHOP_RECEIPT = "ShopReceipt"
 const val SHOP_RECEIPT_P = "ShopReceipt/{shopId}"
+const val UPDATE_PRODUCT = "UpdateProduct"
+const val UPDATE_SHOP = "UpdateShop"
 
 

@@ -26,15 +26,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-
 import com.foyangtech.shop_management.*
+import com.foyangtech.shop_management.common.snackbar.SnackbarManager
 import com.foyangtech.shop_management.ui.components.PermissionDialog
 import com.foyangtech.shop_management.ui.components.RationaleDialog
-import com.foyangtech.shop_management.common.snackbar.SnackbarManager
+import com.foyangtech.shop_management.ui.components.shopScreens
 import com.foyangtech.shop_management.ui.screens.home.HomeScreen
 import com.foyangtech.shop_management.ui.screens.login.LoginScreen
 import com.foyangtech.shop_management.ui.screens.settings.SettingsScreen
-import com.foyangtech.shop_management.ui.screens.shop.shopScreens
 import com.foyangtech.shop_management.ui.screens.sign_up.SignUpScreen
 import com.foyangtech.shop_management.ui.screens.splash.SplashScreen
 import com.foyangtech.shop_management.ui.theme.ShopManagementTheme
@@ -81,7 +80,7 @@ fun ShopManagementComposeUi() {
                         enter = slideInVertically(initialOffsetY = { it }),
                         exit = slideOutVertically(targetOffsetY = { it }),
                     ) {
-                       NavigationBar() {
+                       NavigationBar {
                             shopScreens.forEach { screen ->
                                 NavigationBarItem(
                                     selected = currentDestination?.hierarchy?.any {
@@ -173,5 +172,5 @@ fun NavGraphBuilder.shopManagementGraph(appState: RootAppState) {
         HomeScreen(openScreen = { route -> appState.navigate(route) })
     }
 
-    shopGraph(appState.navController)
+    shopGraph(appState)
 }
