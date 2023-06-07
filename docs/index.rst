@@ -1,6 +1,6 @@
   SHOP-MANAGEMENT
 
-    Introuction
+    Introduction
 
 Shop-Management is an android application build with android Studio using kotlin language for his development. 
 The Jetpack compose framework was using for the UI development. 
