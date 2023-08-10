@@ -48,6 +48,7 @@ import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
 import kotlinx.coroutines.CoroutineScope
 
+
 @Composable
 @ExperimentalMaterial3Api
 fun ShopManagementComposeUi() {
@@ -147,6 +148,9 @@ fun resources(): Resources {
     return LocalContext.current.resources
 }
 
+/**
+ *  FIRST NAVIGATION GRAPH
+ */
 @ExperimentalMaterial3Api
 fun NavGraphBuilder.shopManagementGraph(appState: RootAppState) {
     composable(SPLASH_SCREEN) {

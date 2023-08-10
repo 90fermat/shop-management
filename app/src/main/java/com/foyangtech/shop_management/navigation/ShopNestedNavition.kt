@@ -1,5 +1,7 @@
 package com.foyangtech.shop_management.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
@@ -18,7 +20,9 @@ import com.foyangtech.shop_management.util.SHOP_SCREEN
 import com.foyangtech.shop_management.util.UPDATE_PRODUCT
 import com.foyangtech.shop_management.util.UPDATE_SHOP
 
-
+/**
+ *  SECOND NAVIGATION GRAPH(Between SHOP Screens)
+ */
 fun NavGraphBuilder.shopGraph(appState: RootAppState) {
 
     navigation(startDestination = "$SHOP_HOME/{shopId}", route = "$SHOP_SCREEN/{shopId}") {

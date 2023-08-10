@@ -24,7 +24,7 @@ class ShopHomeViewModel@Inject constructor(
             shop.value = storageService.getShop(shopId) ?: Shop()
         }
         launchCatching {
-            products.value = storageService.getShopProducts(shopId)
+            products.value = storageService.getProductsFromShop(shopId)
         }
     }
 }

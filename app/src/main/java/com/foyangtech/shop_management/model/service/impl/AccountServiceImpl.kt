@@ -19,6 +19,9 @@ class AccountServiceImpl @Inject constructor(private val auth: FirebaseAuth) : A
   override val hasUser: Boolean
     get() = auth.currentUser != null
 
+  /**
+   * Get Current User
+   */
   override val currentUser: Flow<User>
     get() = callbackFlow {
       val listener =
